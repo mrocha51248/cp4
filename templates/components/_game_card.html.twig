@@ -6,5 +6,6 @@
             <em>Categories</em>: {{ game.categories|length }}<br>
             <em>Played</em>: {{ game.races|length }} times
         </p>
+        <a href="{{ path('game_show', {slug: game.slug}) }}" class="stretched-link"></a>
     </div>
 </div>
