@@ -28,6 +28,10 @@ class Race
     #[ORM\JoinColumn(nullable: false)]
     private $category;
 
+    #[ORM\ManyToOne(targetEntity: Game::class, inversedBy: 'races')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $game;
+
     public function __construct()
     {
         $this->results = new ArrayCollection();
@@ -100,6 +104,18 @@ class Race
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getGame(): ?Game
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Game $game): self
+    {
+        $this->game = $game;
 
         return $this;
     }

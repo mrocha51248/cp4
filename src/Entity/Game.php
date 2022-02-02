@@ -24,9 +24,13 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Category::class, orphanRemoval: true)]
     private $categories;
 
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: Race::class, orphanRemoval: true)]
+    private $races;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->races = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,6 +86,36 @@ class Game
             // set the owning side to null (unless already changed)
             if ($category->getGame() === $this) {
                 $category->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Race[]
+     */
+    public function getRaces(): Collection
+    {
+        return $this->races;
+    }
+
+    public function addRace(Race $race): self
+    {
+        if (!$this->races->contains($race)) {
+            $this->races[] = $race;
+            $race->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRace(Race $race): self
+    {
+        if ($this->races->removeElement($race)) {
+            // set the owning side to null (unless already changed)
+            if ($race->getGame() === $this) {
+                $race->setGame(null);
             }
         }
 
