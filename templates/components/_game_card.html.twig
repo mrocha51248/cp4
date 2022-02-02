@@ -1,0 +1,10 @@
+<div class="card">
+    <h5 class="card-header">{{ game.name }}</h5>
+    <img src="{{ game.logo }}" class="card-img-top">
+    <div class="card-body">
+        <p class="card-text">
+            <em>Categories</em>: {{ game.categories|length }}<br>
+            <em>Played</em>: {{ game.races|length }} times
+        </p>
+    </div>
+</div>
