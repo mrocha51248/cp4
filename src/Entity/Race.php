@@ -24,6 +24,10 @@ class Race
     #[ORM\OneToMany(mappedBy: 'race', targetEntity: RaceResult::class, orphanRemoval: true)]
     private $results;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'races')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $category;
+
     public function __construct()
     {
         $this->results = new ArrayCollection();
@@ -84,6 +88,18 @@ class Race
                 $result->setRace(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
