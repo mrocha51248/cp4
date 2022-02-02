@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for score in category.userScores %}
+                {% for score in category.userScores[:5] %}
                 <tr>
                     <td>{{ score.elo }}</td>
                     <td>{{ score.user.name }}</td>
