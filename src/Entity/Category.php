@@ -29,6 +29,9 @@ class Category
     #[ORM\OrderBy(["elo" => "DESC"])]
     private $userScores;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $slug;
+
     public function __construct()
     {
         $this->races = new ArrayCollection();
@@ -120,6 +123,18 @@ class Category
                 $userScore->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

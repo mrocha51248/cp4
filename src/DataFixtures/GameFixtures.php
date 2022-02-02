@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Game;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class GameFixtures extends Fixture
 {
@@ -59,12 +60,17 @@ class GameFixtures extends Fixture
         ],
     ];
 
+    public function __construct(private SluggerInterface $slugger)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         foreach (self::GAMES as $gameData) {
             $game = (new Game())
                 ->setName($gameData['name'])
                 ->setLogo($gameData['logo'])
+                ->setSlug($this->slugger->slug(($gameData['name'])))
             ;
 
             $manager->persist($game);

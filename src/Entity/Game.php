@@ -27,6 +27,9 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Race::class, orphanRemoval: true)]
     private $races;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $slug;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -118,6 +121,18 @@ class Game
                 $race->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

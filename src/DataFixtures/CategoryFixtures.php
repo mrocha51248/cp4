@@ -7,6 +7,7 @@ use App\Entity\Game;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -25,6 +26,10 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
         'Pokémon Red' => [],
     ];
 
+    public function __construct(private SluggerInterface $slugger)
+    {
+    }
+
     public function load(ObjectManager $manager): void
     {
         foreach ($this->referenceRepository->getReferences() as $key => $reference) {
@@ -39,6 +44,7 @@ class CategoryFixtures extends Fixture implements DependentFixtureInterface
             foreach ($categories as $categoryName) {
                 $category = (new Category())
                     ->setName($categoryName)
+                    ->setSlug($this->slugger->slug($categoryName))
                 ;
                 $game->addCategory($category);
 
