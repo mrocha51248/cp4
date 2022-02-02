@@ -25,9 +25,13 @@ class Category
     #[ORM\JoinColumn(nullable: false)]
     private $game;
 
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: UserScore::class, orphanRemoval: true)]
+    private $userScores;
+
     public function __construct()
     {
         $this->races = new ArrayCollection();
+        $this->userScores = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,6 +89,36 @@ class Category
     public function setGame(?Game $game): self
     {
         $this->game = $game;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserScore[]
+     */
+    public function getUserScores(): Collection
+    {
+        return $this->userScores;
+    }
+
+    public function addUserScore(UserScore $userScore): self
+    {
+        if (!$this->userScores->contains($userScore)) {
+            $this->userScores[] = $userScore;
+            $userScore->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserScore(UserScore $userScore): self
+    {
+        if ($this->userScores->removeElement($userScore)) {
+            // set the owning side to null (unless already changed)
+            if ($userScore->getCategory() === $this) {
+                $userScore->setCategory(null);
+            }
+        }
 
         return $this;
     }
