@@ -19,22 +19,21 @@ class CategoryRepository extends ServiceEntityRepository
         parent::__construct($registry, Category::class);
     }
 
-    // /**
-    //  * @return Category[] Returns an array of Category objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Category[] Returns an array of Category objects
+     */
+    public function findMostRaced(?int $mostPlayed)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+            ->addSelect('COUNT(r) AS HIDDEN total_races')
+            ->innerJoin('c.races', 'r')
+            ->groupBy('c.id')
+            ->orderBy('total_races', 'DESC')
+            ->setMaxResults($mostPlayed)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Category
