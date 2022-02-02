@@ -28,6 +28,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->addSelect('COUNT(r) AS HIDDEN total_races')
             ->innerJoin('c.races', 'r')
             ->groupBy('c.id')
+            ->andHaving('total_races > 0')
             ->orderBy('total_races', 'DESC')
             ->setMaxResults($mostPlayed)
             ->getQuery()
