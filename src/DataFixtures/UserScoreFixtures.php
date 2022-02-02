@@ -29,6 +29,10 @@ class UserScoreFixtures extends Fixture implements DependentFixtureInterface
                 /** @var Category */
                 $category = $this->getReference($categoryKey);
 
+                if (!count($category->getRaces())) {
+                    continue;
+                }
+
                 $elo = 1000 + (500 * (crc32($userKey . $categoryKey) / 0xFFFFFFFF) * 2);
                 $score = (new UserScore())
                     ->setElo($elo)
@@ -47,6 +51,7 @@ class UserScoreFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             CategoryFixtures::class,
+            RaceFixtures::class,
             UserFixtures::class,
         ];
     }
