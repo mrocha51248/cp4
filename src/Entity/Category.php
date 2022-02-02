@@ -21,6 +21,10 @@ class Category
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Race::class, orphanRemoval: true)]
     private $races;
 
+    #[ORM\ManyToOne(targetEntity: Game::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $game;
+
     public function __construct()
     {
         $this->races = new ArrayCollection();
@@ -69,6 +73,18 @@ class Category
                 $race->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGame(): ?Game
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Game $game): self
+    {
+        $this->game = $game;
 
         return $this;
     }
