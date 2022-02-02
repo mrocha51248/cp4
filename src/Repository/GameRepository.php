@@ -19,22 +19,22 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-    // /**
-    //  * @return Game[] Returns an array of Game objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findMostRaced(?int $mostPlayed)
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('g.id', 'ASC')
-            ->setMaxResults(10)
+            ->addSelect('COUNT(g) AS HIDDEN total_races')
+            ->innerJoin('g.categories', 'c')
+            ->innerJoin('c.races', 'r')
+            ->groupBy('g.id')
+            ->orderBy('total_races', 'DESC')
+            ->setMaxResults($mostPlayed)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Game
