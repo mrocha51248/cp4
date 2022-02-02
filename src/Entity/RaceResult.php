@@ -29,6 +29,10 @@ class RaceResult
     #[ORM\JoinColumn(nullable: false)]
     private $user;
 
+    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'results')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $race;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +94,18 @@ class RaceResult
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRace(): ?Race
+    {
+        return $this->race;
+    }
+
+    public function setRace(?Race $race): self
+    {
+        $this->race = $race;
 
         return $this;
     }
