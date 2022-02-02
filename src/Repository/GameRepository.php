@@ -26,8 +26,7 @@ class GameRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('g')
             ->addSelect('COUNT(g) AS HIDDEN total_races')
-            ->innerJoin('g.categories', 'c')
-            ->innerJoin('c.races', 'r')
+            ->innerJoin('g.races', 'r')
             ->groupBy('g.id')
             ->orderBy('total_races', 'DESC')
             ->setMaxResults($mostPlayed)
