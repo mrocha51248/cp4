@@ -26,6 +26,7 @@ class Category
     private $game;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: UserScore::class, orphanRemoval: true)]
+    #[ORM\OrderBy(["elo" => "DESC"])]
     private $userScores;
 
     public function __construct()
