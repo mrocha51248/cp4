@@ -30,6 +30,7 @@ class RaceFixtures extends Fixture implements DependentFixtureInterface
                     ->setFinishedAt(new DateTimeImmutable('2022-02-02 15:00'))
                 ;
                 $category->addRace($race);
+                $game->addRace($race);
 
                 $manager->persist($race);
                 $this->addReference("race_{$game->getName()}_{$category->getName()}_$index", $race);
