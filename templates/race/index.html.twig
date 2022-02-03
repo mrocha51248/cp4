@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Races{% endblock %}
+
+{% block body %}
+<main class="main-races text-center">
+    <h1>Races</h1>
+
+    <div class="container">
+        <table class="table table-dark table-sm table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Finished</th>
+                    <th scope="col">Game</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Players</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for race in races %}
+                <tr class="position-relative">
+                    <td><a href="#" class="stretched-link"></a>{{ race.finishedAt|date }}</td>
+                    <td>{{ race.category.game.name }}</td>
+                    <td>{{ race.category.name }}</td>
+                    <td>{{ race.results|length }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}
