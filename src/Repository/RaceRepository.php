@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Race;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,6 +30,24 @@ class RaceRepository extends ServiceEntityRepository
             ->andWhere('r.finishedAt IS NOT NULL')
             ->orderBy('r.finishedAt', 'DESC')
             ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Race[] Returns an array of Race objects
+     */
+    public function findJoinableRaces(User $user, Category $category)
+    {
+        return $this->createQueryBuilder('r')
+            ->addSelect('COUNT(r) AS HIDDEN total_results')
+            ->andWhere('r.finishedAt IS NULL')
+            ->andWhere('r.category = :category')
+            ->innerJoin('r.results', 'rr', 'WITH', 'rr.user = :user')
+            ->setParameters(['category' => $category, 'user' => $user])
+            ->groupBy('r.id')
+            ->andHaving('total_results = 0')
             ->getQuery()
             ->getResult()
         ;
