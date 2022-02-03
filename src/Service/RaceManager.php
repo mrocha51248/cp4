@@ -73,4 +73,19 @@ class RaceManager
 
         return $result;
     }
+
+    public function userDone(RaceResult $result, ?DateTimeImmutable $time = new DateTimeImmutable()): void
+    {
+        if (!$time) {
+            $time = $result->getRace()->getCreatedAt();
+        }
+
+        $result->setFinishedAt($time);
+        $this->entityManager->flush();
+    }
+
+    public function userForfeit(RaceResult $result): void
+    {
+        $this->userDone($result, null);
+    }
 }
