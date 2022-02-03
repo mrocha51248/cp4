@@ -13,7 +13,7 @@ class UserFixtures extends Fixture
         [
             'email' => 'admin@cp4.gg',
             'name' => 'Administrator',
-            'roles' => ['USER_ADMIN'],
+            'roles' => ['ROLE_ADMIN'],
         ],
         [
             'email' => 'user1@cp4.gg',
