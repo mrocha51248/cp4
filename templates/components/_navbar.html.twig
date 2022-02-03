@@ -24,7 +24,7 @@
             <ul class="nav navbar-nav ms-auto">
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <li class="nav-item d-flex">
-                    <span class="nav-link pe-2">{{ app.user.name }}</span>
+                    <a class="nav-link pe-2" href="{{ path('profile_index') }}">{{ app.user.name }}</a>
                     <a class="nav-link" href="{{ path('app_logout') }}">Log out</a>
                 </li>
                 {% else %}
