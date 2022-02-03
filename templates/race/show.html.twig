@@ -24,9 +24,9 @@
     {% if race.finishedAt is null and user_result is not null and user_result.finishedAt is null %}
     <hr>
     <div>
-        <span class="race-timer">Starting...</span>
-        <a href="#" class="btn btn-primary">Done</a>
-        <a href="#" class="btn btn-danger">Forfeit</a>
+        <span class="race-timer" data-start-time="{{ race.createdAt|date('U') }}">Starting...</span>
+        <a href="#" class="btn btn-primary race-timer-stopper">Done</a>
+        <a href="#" class="btn btn-danger race-timer-stopper">Forfeit</a>
     </div>
 
     {% endif %}
