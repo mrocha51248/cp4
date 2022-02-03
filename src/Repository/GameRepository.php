@@ -22,7 +22,7 @@ class GameRepository extends ServiceEntityRepository
     /**
      * @return Game[] Returns an array of Game objects
      */
-    public function findMostRaced(?int $mostPlayed)
+    public function findMostRaced(?int $maxResults = null)
     {
         return $this->createQueryBuilder('g')
             ->addSelect('COUNT(g) AS HIDDEN total_races')
@@ -30,7 +30,7 @@ class GameRepository extends ServiceEntityRepository
             ->groupBy('g.id')
             ->andHaving('total_races > 0')
             ->orderBy('total_races', 'DESC')
-            ->setMaxResults($mostPlayed)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
         ;

@@ -22,7 +22,7 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * @return Category[] Returns an array of Category objects
      */
-    public function findMostRaced(?int $mostPlayed)
+    public function findMostRaced(?int $maxResults = null)
     {
         return $this->createQueryBuilder('c')
             ->addSelect('COUNT(r) AS HIDDEN total_races')
@@ -30,7 +30,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->groupBy('c.id')
             ->andHaving('total_races > 0')
             ->orderBy('total_races', 'DESC')
-            ->setMaxResults($mostPlayed)
+            ->setMaxResults($maxResults)
             ->getQuery()
             ->getResult()
         ;
