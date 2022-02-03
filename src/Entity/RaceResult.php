@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RaceResultRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RaceResultRepository::class)]
@@ -108,5 +109,34 @@ class RaceResult
         $this->race = $race;
 
         return $this;
+    }
+
+    public function isFinished(): bool
+    {
+        return $this->getFinishedAt() !== null;
+    }
+
+    public function isForfeited(): bool
+    {
+        return $this->isFinished() && $this->getFinishedAt() <= $this->getStartedAt();
+    }
+
+    public function compare(RaceResult $other): int
+    {
+        $makeScore = fn($x) => !$x->isFinished() ? 2 : ($x->isForfeited() ? 1 : 0);
+        $thisScore = $makeScore($this);
+        $otherScore = $makeScore($other);
+        if ($thisScore === $otherScore) {
+            if (!$this->isFinished() || $this->isForfeited()) {
+                return $this->getStartedAt() <=> $other->getStartedAt();
+            }
+
+            // Can't compare DateInterval directly
+            $now = new DateTimeImmutable();
+            $thisTime = $now->add($this->getFinishedAt()->diff($this->getStartedAt()));
+            $otherTime = $now->add($other->getFinishedAt()->diff($other->getStartedAt()));
+            return $otherTime <=> $thisTime;
+        }
+        return $thisScore <=> $otherScore;
     }
 }
