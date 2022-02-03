@@ -1,0 +1,12 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ parent() }} - Administration{% endblock %}
+
+{% block body %}
+<div class="d-flex h-100">
+    {% include "components/_admin_sidebar.html.twig" %}
+    <div>
+        {% block admin_body %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
