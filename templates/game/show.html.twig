@@ -16,7 +16,11 @@
                             <h4><strong>{{ category.name }}</strong></h4>
                             <span><em>Played</em>: {{ category.races|length }} times</span>
                         </div>
-                        <a href="#" class="btn btn-primary">Play</a>
+                        {% set play_path = path('game_play', {gameSlug: game.slug, categorySlug: category.slug}) %}
+                        <form action="{{ play_path }}" method="POST">
+                            <input type="hidden" name="token" value="{{ csrf_token(category.id) }}"/>
+                            <button type="submit" class="btn btn-primary">Play</button>
+                        </form>
                     </th>
                 </tr>
             </thead>
