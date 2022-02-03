@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Entity\Race;
 use App\Repository\RaceRepository;
 use App\Repository\RaceResultRepository;
+use App\Service\RaceManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/race', name: 'race_')]
 class RaceController extends AbstractController
@@ -36,5 +40,37 @@ class RaceController extends AbstractController
             'race' => $race,
             'user_result' => $raceResult,
         ]);
+    }
+
+    #[Route('/{race}/done', name: 'done', methods: 'POST', defaults: ['isForfeit' => false])]
+    #[Route('/{race}/forfeit', name: 'forfeit', methods: 'POST', defaults: ['isForfeit' => true])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function done(
+        Race $race,
+        RaceResultRepository $raceResultRepository,
+        RaceManager $raceManager,
+        Request $request,
+        bool $isForfeit
+    ): Response {
+        $submittedToken = $request->request->get('token');
+
+        if ($this->isCsrfTokenValid("{$race->getId()}", $submittedToken)) {
+            $raceResult = $raceResultRepository->findOneBy([
+                'user' => $this->getUser(),
+                'finishedAt' => null,
+            ]);
+            if (!$raceResult || $raceResult->getRace() !== $race) {
+                throw new AccessDeniedException('Invalid race');
+            }
+
+            if ($isForfeit) {
+                $raceManager->userForfeit($raceResult);
+            } else {
+                $raceManager->userDone($raceResult);
+            }
+            return $this->redirectToRoute('race_show', ['race' => $race->getId()]);
+        }
+
+        throw new AccessDeniedException();
     }
 }

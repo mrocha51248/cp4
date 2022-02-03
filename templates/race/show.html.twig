@@ -8,30 +8,38 @@
 {% endblock %}
 
 {% block body %}
+{% set show_results = race.finished or is_granted('ROLE_ADMIN') or (user_result.finished ?? false) %}
 <main class="main-race text-center">
     <h1>{{ race.category.game.name }} - {{ race.category.name }}</h1>
 
     <p class="m-auto">
         <em>Started</em>: {{ race.createdAt|date }}<br>
-        {% if race.finishedAt is not null %}
+        {% if race.finished %}
         <em>Finished</em>: {{ race.finishedAt|date }}<br>
         {% endif %}
-        {% if race.finishedAt is not null or is_granted('ROLE_ADMIN') %}
+        {% if show_results %}
         <em>Players</em>: {{ race.results|length }}<br>
         {% endif %}
     </p>
 
-    {% if race.finishedAt is null and user_result is not null and user_result.finishedAt is null %}
+    {% if not race.finished %}
     <hr>
     <div>
-        <span class="race-timer" data-start-time="{{ race.createdAt|date('U') }}">Starting...</span>
-        <a href="#" class="btn btn-primary race-timer-stopper">Done</a>
-        <a href="#" class="btn btn-danger race-timer-stopper">Forfeit</a>
+        <span class="race-timer" data-start-time="{{ user_result.startedAt|date('U') }}">Loading...</span>
+        {% if not (user_result.finished ?? true) %}
+        <form action="{{ path('race_done', {race: race.id}) }}" method="POST">
+            <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
+            <button type="submit" class="btn btn-primary race-timer-stopper">Done</button>
+        </form>
+        <form action="{{ path('race_forfeit', {race: race.id}) }}" method="POST">
+            <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
+            <button type="submit" class="btn btn-danger race-timer-stopper">Forfeit</button>
+        </form>
+        {% endif %}
     </div>
-
     {% endif %}
 
-    {% if race.finishedAt is not null or is_granted('ROLE_ADMIN') %}
+    {% if show_results %}
     <hr>
     <h2>Results</h2>
     <div class="container">
@@ -45,24 +53,31 @@
                 </tr>
             </thead>
             <tbody>
-                {% for result in race.results %}
+                {% for result in race.results|sort((a, b) => a.compare(b)) %}
                 <tr>
-                    {% if result.finishedAt is not null %}
-                    {% set time_diff = result.finishedAt.diff(result.startedAt) %}
-                    {% set hours = time_diff.h + (time_diff.d * 24) %}
-                    <td>{{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S') }}</td>
+                    {% if result.finished %}
+                        {% if not result.forfeited %}
+                            {% set time_diff = result.finishedAt.diff(result.startedAt) %}
+                            {% set hours = time_diff.h + (time_diff.days * 24) %}
+                            <td>{{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S') }}</td>
+                        {% else %}
+                            <td class="text-danger">Forfeit</td>
+                        {% endif %}
                     {% else %}
-                    <td>Racing...</td>
+                        <td>Racing...</td>
                     {% endif %}
 
                     <td>{{ result.user.name }}</td>
 
-                    {% set elo_diff = result.finishElo - result.startElo %}
                     <td>
-                        {{ result.finishElo }}
-                        <span class="elo-diff{{ elo_diff > 0 ? ' elo-diff-positive' : (elo_diff < 0 ? ' elo-diff-negative' : '')}}">
-                            {{ result.finishElo - result.startElo }}
+                        {{ result.startElo }}
+                        {% if race.finished %}
+                        {% set elo_diff = result.finishElo - result.startElo %}
+                        -> {{ result.finishElo }}
+                        <span class="p-1 small{{ elo_diff > 0 ? ' text-success' : (elo_diff < 0 ? ' text-danger' : '')}}">
+                            {{ (elo_diff > 0 ? '+' : '') ~ elo_diff }}
                         </span>
+                        {% endif %}
                     </td>
 
                     <td>{{ result.startedAt|date }}</td>
