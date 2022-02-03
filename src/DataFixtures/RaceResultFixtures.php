@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Race;
 use App\Entity\RaceResult;
 use App\Entity\User;
+use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -34,12 +35,16 @@ class RaceResultFixtures extends Fixture implements DependentFixtureInterface
                 /** @var Race */
                 $race = $this->getReference($raceKey);
 
-                $startElo = 1000 + (500 * (crc32($userKey . $raceKey . '1') / 0xFFFFFFFF) * 2);
-                $finishElo = 1000 + (500 * (crc32($userKey . $raceKey . '2') / 0xFFFFFFFF) * 2);
+                $startedAt = new DateTimeImmutable('2021-12-31 23:00');
+                $finishedAt = $startedAt->add(
+                    DateInterval::createFromDateString(intval((crc32($userKey . $raceKey . '2') / 0xFFFFFFFF) * 10000) . ' seconds')
+                );
+                $startElo = 500 + intval(1500 * (crc32($userKey . $raceKey . '2') / 0xFFFFFFFF));
+                $finishElo = $startElo - 50 + intval(100 * (crc32($userKey . $raceKey . '1') / 0xFFFFFFFF));
 
                 $result = (new RaceResult())
-                    ->setStartedAt(new DateTimeImmutable('2021-12-31 15:00'))
-                    ->setFinishedAt(new DateTimeImmutable('2022-02-02 15:00'))
+                    ->setStartedAt($startedAt)
+                    ->setFinishedAt($finishedAt)
                     ->setStartElo($startElo)
                     ->setFinishElo($finishElo)
                 ;

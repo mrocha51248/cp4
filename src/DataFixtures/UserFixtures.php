@@ -27,6 +27,14 @@ class UserFixtures extends Fixture
             'email' => 'user3@cp4.gg',
             'name' => 'User3',
         ],
+        [
+            'email' => 'user4@cp4.gg',
+            'name' => 'User4',
+        ],
+        [
+            'email' => 'user5@cp4.gg',
+            'name' => 'User5',
+        ],
     ];
 
     public function __construct(private UserPasswordHasherInterface $passwordHasher)

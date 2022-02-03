@@ -33,7 +33,7 @@ class UserScoreFixtures extends Fixture implements DependentFixtureInterface
                     continue;
                 }
 
-                $elo = 1000 + (500 * (crc32($userKey . $categoryKey) / 0xFFFFFFFF) * 2);
+                $elo = 1000 + intval(500 * (crc32($userKey . $categoryKey) / 0xFFFFFFFF) * 2);
                 $score = (new UserScore())
                     ->setElo($elo)
                 ;
