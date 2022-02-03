@@ -69,16 +69,17 @@
 
                     <td>{{ result.user.name }}</td>
 
+                    {% if race.finished %}
                     <td>
-                        {{ result.startElo }}
-                        {% if race.finished %}
+                        {{ result.startElo }} -> {{ result.finishElo }}
                         {% set elo_diff = result.finishElo - result.startElo %}
-                        -> {{ result.finishElo }}
                         <span class="p-1 small{{ elo_diff > 0 ? ' text-success' : (elo_diff < 0 ? ' text-danger' : '')}}">
                             {{ (elo_diff > 0 ? '+' : '') ~ elo_diff }}
                         </span>
-                        {% endif %}
                     </td>
+                    {% else %}
+                    <td>{{ result.startElo }}</td>
+                    {% endif %}
 
                     <td>{{ result.startedAt|date }}</td>
                 </tr>
