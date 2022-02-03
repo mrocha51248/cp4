@@ -41,13 +41,11 @@ class RaceRepository extends ServiceEntityRepository
     public function findJoinableRaces(User $user, Category $category)
     {
         return $this->createQueryBuilder('r')
-            ->addSelect('COUNT(r) AS HIDDEN total_results')
             ->andWhere('r.finishedAt IS NULL')
             ->andWhere('r.category = :category')
-            ->innerJoin('r.results', 'rr', 'WITH', 'rr.user = :user')
+            ->leftJoin('r.results', 'rr', 'WITH', 'rr.user = :user')
             ->setParameters(['category' => $category, 'user' => $user])
-            ->groupBy('r.id')
-            ->andHaving('total_results = 0')
+            ->andWhere('rr.user IS NULL')
             ->getQuery()
             ->getResult()
         ;
