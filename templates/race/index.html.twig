@@ -19,7 +19,7 @@
             <tbody>
                 {% for race in races %}
                 <tr class="position-relative">
-                    <td><a href="#" class="stretched-link"></a>{{ race.finishedAt|date }}</td>
+                    <td><a href="{{ path('race_show', {race: race.id}) }}" class="stretched-link"></a>{{ race.finishedAt|date }}</td>
                     <td>{{ race.category.game.name }}</td>
                     <td>{{ race.category.name }}</td>
                     <td>{{ race.results|length }}</td>

@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} - Race - {{ race.category.game.name }} - {{ race.category.name }}{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('race_timer') }}
+{% endblock %}
+
+{% block body %}
+<main class="main-race text-center">
+    <h1>{{ race.category.game.name }} - {{ race.category.name }}</h1>
+
+    <p class="m-auto">
+        <em>Started</em>: {{ race.createdAt|date }}<br>
+        {% if race.finishedAt is not null %}
+        <em>Finished</em>: {{ race.finishedAt|date }}<br>
+        {% endif %}
+        {% if race.finishedAt is not null or is_granted('ROLE_ADMIN') %}
+        <em>Players</em>: {{ race.results|length }}<br>
+        {% endif %}
+    </p>
+
+    {% if race.finishedAt is null and user_result is not null and user_result.finishedAt is null %}
+    <hr>
+    <div>
+        <span class="race-timer">Starting...</span>
+        <a href="#" class="btn btn-primary">Done</a>
+        <a href="#" class="btn btn-danger">Forfeit</a>
+    </div>
+
+    {% endif %}
+
+    {% if race.finishedAt is not null or is_granted('ROLE_ADMIN') %}
+    <hr>
+    <h2>Results</h2>
+    <div class="container">
+        <table class="table table-dark table-sm table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">Player</th>
+                    <th scope="col">Score</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in race.results %}
+                <tr>
+                    {% if result.finishedAt is not null %}
+                    {% set time_diff = result.finishedAt.diff(result.startedAt) %}
+                    {% set hours = time_diff.h + (time_diff.d * 24) %}
+                    <td>{{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S') }}</td>
+                    {% else %}
+                    <td>Racing...</td>
+                    {% endif %}
+
+                    <td>{{ result.user.name }}</td>
+
+                    {% set elo_diff = result.finishElo - result.startElo %}
+                    <td>
+                        {{ result.finishElo }}
+                        <span class="elo-diff{{ elo_diff > 0 ? ' elo-diff-positive' : (elo_diff < 0 ? ' elo-diff-negative' : '')}}">
+                            {{ result.finishElo - result.startElo }}
+                        </span>
+                    </td>
+
+                    <td>{{ result.startedAt|date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}
