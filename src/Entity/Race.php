@@ -119,4 +119,9 @@ class Race
 
         return $this;
     }
+
+    public function isFinished(): bool
+    {
+        return $this->getFinishedAt() !== null;
+    }
 }
