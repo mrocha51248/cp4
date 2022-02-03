@@ -41,11 +41,11 @@ class GameController extends AbstractController
     {
         $submittedToken = $request->request->get('token');
 
-        if ($this->isCsrfTokenValid("{$category->getId()}", $submittedToken)) {
-            $raceResult = $raceManager->play($this->getUser(), $category);
-            return $this->redirectToRoute('race_show', ['race' => $raceResult->getRace()->getId()]);
+        if (!$this->isCsrfTokenValid("{$category->getId()}", $submittedToken)) {
+            throw new AccessDeniedException();
         }
 
-        throw new AccessDeniedException();
+        $raceResult = $raceManager->play($this->getUser(), $category);
+        return $this->redirectToRoute('race_show', ['race' => $raceResult->getRace()->getId()]);
     }
 }
