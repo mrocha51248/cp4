@@ -1,0 +1,36 @@
+{% extends 'admin_base.html.twig' %}
+
+{% block title %}{{ parent() }} - Active Races{% endblock %}
+
+{% block admin_body %}
+<main class="main-races main-admin-races text-center">
+    <h1>Active Races</h1>
+
+    <div class="container">
+        <table class="table table-dark table-sm table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Game</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Players</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for race in races %}
+                <tr>
+                    <td><a href="{{ path('race_show', {race: race.id}) }}">{{ race.id }}</a></td>
+                    <td>{{ race.createdAt|date }}</td>
+                    <td>{{ race.category.game.name }}</td>
+                    <td>{{ race.category.name }}</td>
+                    <td>{{ race.results|length }}</td>
+                    <td><a href="#" class="btn btn-primary">Close</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}

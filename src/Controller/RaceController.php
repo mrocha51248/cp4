@@ -24,6 +24,15 @@ class RaceController extends AbstractController
         ]);
     }
 
+    #[Route('/admin', name: 'admin_list')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function adminList(RaceRepository $raceRepository): Response
+    {
+        return $this->render('race/admin_list.html.twig', [
+            'races' => $raceRepository->findBy(['finishedAt' => null], ['createdAt' => 'ASC']),
+        ]);
+    }
+
     #[Route('/{race}', name: 'show')]
     public function show(Race $race, RaceResultRepository $raceResultRepository): Response
     {
