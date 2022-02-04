@@ -27,7 +27,7 @@ class UserScoreManager
         return $userScore->getElo();
     }
 
-    public function saveScore(User $user, Category $category, int $elo): int
+    public function saveScore(User $user, Category $category, int $elo, bool $flush = true): int
     {
         $userScore = $this->userScoreRepository->findOneBy(['user' => $user, 'category' => $category]);
 
@@ -42,7 +42,9 @@ class UserScoreManager
         }
 
         $userScore->setElo($elo);
-        $this->entityManager->flush();
+        if ($flush) {
+            $this->entityManager->flush();
+        }
 
         return $previousElo;
     }

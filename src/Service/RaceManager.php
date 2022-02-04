@@ -91,7 +91,7 @@ class RaceManager
                 $elo += $game->getPlayer1()->getRating() - $result->getStartElo();
             }
             $result->setFinishElo($elo);
-            $this->userScoreManager->saveScore($result->getUser(), $race->getCategory(), $elo);
+            $this->userScoreManager->saveScore($result->getUser(), $race->getCategory(), $elo, false);
         }
 
         $this->entityManager->flush();
