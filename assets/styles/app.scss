@@ -4,6 +4,11 @@ body {
     background-color: lightgray;
 }
 
+.cell-shrink {
+    width: 0.1%;
+    white-space: nowrap;
+}
+
 .main-container {
     display: flex;
     flex-direction: column;
@@ -15,11 +20,16 @@ body {
     }
 }
 
+.main-home table {
+    width: 20rem;
+}
+
 .game-card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
+    margin-bottom: 1rem;
 
     .card {
         width: 15rem;

@@ -6,7 +6,7 @@
     <hr>
 
     <h2>Leaderboard</h2>
-    <div class="container d-flex flex-wrap">
+    <div class="container d-flex flex-wrap justify-content-center gap-1">
         {% for category in categories %}
         <table class="table table-dark table-sm table-striped table-hover">
             <thead>
@@ -20,7 +20,7 @@
             <tbody>
                 {% for score in category.userScores[:5] %}
                 <tr>
-                    <td>{{ score.elo }}</td>
+                    <td class="cell-shrink ps-2">{{ score.elo }}</td>
                     <td>{{ score.user.name }}</td>
                 </tr>
                 {% endfor %}

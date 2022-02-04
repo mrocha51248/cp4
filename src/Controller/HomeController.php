@@ -15,7 +15,7 @@ class HomeController extends AbstractController
     public function index(CategoryRepository $categoryRepository, GameRepository $gameRepository): Response
     {
         return $this->render('home/index.html.twig', [
-            'categories' => $categoryRepository->findMostRaced(5),
+            'categories' => $categoryRepository->findMostRaced(4),
             'games' => $gameRepository->findMostRaced(10),
         ]);
     }
