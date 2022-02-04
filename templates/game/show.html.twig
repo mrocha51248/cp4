@@ -6,29 +6,35 @@
 <main class="main-game text-center">
     <h1>{{ game.name }}</h1>
 
-    <div class="container d-flex flex-wrap">
+    <div class="container d-flex flex-wrap justify-content-center align-items-start gap-1">
         {% for category in game.categories|sort((a, b) => a.name <=> b.name) %}
-        <table class="table table-dark table-sm table-striped table-hover">
+        <table class="table table-dark table-sm table-striped table-hover mb-0">
             <thead>
                 <tr>
                     <th scope="col" colspan="1000">
-                        <div>
-                            <h4><strong>{{ category.name }}</strong></h4>
-                            <span><em>Played</em>: {{ category.races|length }} times</span>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="flex-grow-1">
+                                <h4><strong>{{ category.name }}</strong></h4>
+                                <span><em>Played</em>: {{ category.races|length }} times</span>
+                            </div>
+                            {% set play_path = path('game_play', {gameSlug: game.slug, categorySlug: category.slug}) %}
+                            <form class="pe-3" action="{{ play_path }}" method="POST">
+                                <input type="hidden" name="token" value="{{ csrf_token(category.id) }}"/>
+                                <button type="submit" class="btn btn-primary">Play</button>
+                            </form>
                         </div>
-                        {% set play_path = path('game_play', {gameSlug: game.slug, categorySlug: category.slug}) %}
-                        <form action="{{ play_path }}" method="POST">
-                            <input type="hidden" name="token" value="{{ csrf_token(category.id) }}"/>
-                            <button type="submit" class="btn btn-primary">Play</button>
-                        </form>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {% for score in category.userScores[:10] %}
                 <tr>
-                    <td>{{ score.elo }}</td>
+                    <td class="cell-shrink ps-2">{{ score.elo }}</td>
                     <td>{{ score.user.name }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>No scores yet</td>
                 </tr>
                 {% endfor %}
             </tbody>
