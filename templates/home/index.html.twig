@@ -31,7 +31,7 @@
     <hr>
 
     <h2>Top Games</h2>
-    <div class="container d-flex flex-wrap">
+    <div class="container game-card-container">
         {% for game in games %}
         {% include "components/_game_card.html.twig" %}
         {% endfor %}
