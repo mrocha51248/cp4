@@ -24,17 +24,27 @@
 
     {% if not race.finished %}
     <hr>
-    <div>
+    <div class="race-controls">
         <span class="race-timer" data-start-time="{{ user_result.startedAt|date('U') }}">Loading...</span>
-        {% if not (user_result.finished ?? true) %}
-        <form action="{{ path('race_done', {race: race.id}) }}" method="POST">
-            <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
-            <button type="submit" class="btn btn-primary race-timer-stopper">Done</button>
-        </form>
-        <form action="{{ path('race_forfeit', {race: race.id}) }}" method="POST">
-            <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
-            <button type="submit" class="btn btn-danger race-timer-stopper">Forfeit</button>
-        </form>
+        {% if user_result is not null %}
+        <div class="d-flex gap-3">
+            <form action="{{ path('race_done', {race: race.id}) }}" method="POST">
+                <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
+                {% if not user_result.finished %}
+                <button type="submit" class="btn btn-primary race-timer-stopper">Done</button>
+                {% else %}
+                <button type="submit" class="btn btn-secondary" disabled>Done</button>
+                {% endif %}
+            </form>
+            <form action="{{ path('race_forfeit', {race: race.id}) }}" method="POST">
+                <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
+                {% if not user_result.forfeited %}
+                <button type="submit" class="btn btn-danger race-timer-stopper">Forfeit</button>
+                {% else %}
+                <button type="submit" class="btn btn-secondary" disabled>Forfeit</button>
+                {% endif %}
+            </form>
+        </div>
         {% endif %}
     </div>
     {% endif %}

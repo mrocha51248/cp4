@@ -69,9 +69,15 @@ class RaceController extends AbstractController
 
         $raceResult = $raceResultRepository->findOneBy([
             'user' => $this->getUser(),
-            'finishedAt' => null,
+            'race' => $race,
         ]);
-        if (!$raceResult || $raceResult->getRace() !== $race) {
+
+        if (
+            $race->isFinished() ||
+            !$raceResult ||
+            $raceResult->isForfeited() ||
+            ($raceResult->isFinished() && !$isForfeit)
+        ) {
             throw new AccessDeniedException('Invalid race');
         }
 
