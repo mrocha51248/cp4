@@ -22,11 +22,10 @@
         {% endif %}
     </p>
 
-    {% if not race.finished %}
+    {% if not race.finished and not (user_result.forfeited ?? true) %}
     <hr>
     <div class="race-controls">
         <span class="race-timer" data-start-time="{{ user_result.startedAt|date('U') }}">Loading...</span>
-        {% if user_result is not null %}
         <div class="d-flex gap-3">
             <form action="{{ path('race_done', {race: race.id}) }}" method="POST">
                 <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
@@ -45,7 +44,6 @@
                 {% endif %}
             </form>
         </div>
-        {% endif %}
     </div>
     {% endif %}
 
