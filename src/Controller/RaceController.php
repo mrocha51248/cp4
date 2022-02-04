@@ -41,7 +41,7 @@ class RaceController extends AbstractController
             'user' => $this->getUser(),
         ]);
 
-        if (!$raceResult && !$race->getFinishedAt()) {
+        if (!$raceResult && !$race->isFinished()) {
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
         }
 

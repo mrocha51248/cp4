@@ -42,7 +42,7 @@ class RaceManager
 
     public function closeRace(Race $race): void
     {
-        if ($race->getFinishedAt()) {
+        if ($race->isFinished()) {
             return;
         }
 
@@ -53,7 +53,7 @@ class RaceManager
             $elo = $this->userScoreManager->getScore($result->getUser(), $race->getCategory());
             $result->setStartElo($elo);
 
-            if (!$result->getFinishedAt()) {
+            if (!$result->isFinished()) {
                 $result->setFinishedAt($race->getCreatedAt());
             }
         }
