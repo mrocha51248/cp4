@@ -6,10 +6,6 @@
 <main class="main-games text-center">
     <h1>Games</h1>
 
-    <form>
-        <input type="search">
-    </form>
-
     <div class="container d-flex flex-wrap">
         {% for game in games %}
         {% include "components/_game_card.html.twig" %}
