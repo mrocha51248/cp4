@@ -50,6 +50,9 @@ class RaceManager
 
         $results = $race->getResults();
         foreach ($results as $result) {
+            $elo = $this->userScoreManager->getScore($result->getUser(), $race->getCategory());
+            $result->setStartElo($elo);
+
             if (!$result->getFinishedAt()) {
                 $result->setFinishedAt($race->getCreatedAt());
             }
@@ -88,7 +91,7 @@ class RaceManager
                 $elo += $game->getPlayer1()->getRating() - $result->getStartElo();
             }
             $result->setFinishElo($elo);
-            $this->userScoreManager->saveScore($result->getUser(), $result->getRace()->getCategory(), $elo);
+            $this->userScoreManager->saveScore($result->getUser(), $race->getCategory(), $elo);
         }
 
         $this->entityManager->flush();
