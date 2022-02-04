@@ -20,6 +20,12 @@ body {
     }
 }
 
+.main-login,
+.main-register {
+    width: fit-content;
+    margin: auto;
+}
+
 .main-home table,
 .main-game table {
     width: 20rem;
