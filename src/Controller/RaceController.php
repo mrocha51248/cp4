@@ -63,23 +63,37 @@ class RaceController extends AbstractController
     ): Response {
         $submittedToken = $request->request->get('token');
 
-        if ($this->isCsrfTokenValid("{$race->getId()}", $submittedToken)) {
-            $raceResult = $raceResultRepository->findOneBy([
-                'user' => $this->getUser(),
-                'finishedAt' => null,
-            ]);
-            if (!$raceResult || $raceResult->getRace() !== $race) {
-                throw new AccessDeniedException('Invalid race');
-            }
-
-            if ($isForfeit) {
-                $raceManager->userForfeit($raceResult);
-            } else {
-                $raceManager->userDone($raceResult);
-            }
-            return $this->redirectToRoute('race_show', ['race' => $race->getId()]);
+        if (!$this->isCsrfTokenValid("{$race->getId()}", $submittedToken)) {
+            throw new AccessDeniedException();
         }
 
-        throw new AccessDeniedException();
+        $raceResult = $raceResultRepository->findOneBy([
+            'user' => $this->getUser(),
+            'finishedAt' => null,
+        ]);
+        if (!$raceResult || $raceResult->getRace() !== $race) {
+            throw new AccessDeniedException('Invalid race');
+        }
+
+        if ($isForfeit) {
+            $raceManager->userForfeit($raceResult);
+        } else {
+            $raceManager->userDone($raceResult);
+        }
+        return $this->redirectToRoute('race_show', ['race' => $race->getId()]);
+    }
+
+    #[Route('/{race}/close', name: 'close', methods: 'POST')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function close(Race $race, RaceManager $raceManager, Request $request): Response
+    {
+        $submittedToken = $request->request->get('token');
+
+        if (!$this->isCsrfTokenValid("{$race->getId()}", $submittedToken)) {
+            throw new AccessDeniedException();
+        }
+
+        $raceManager->closeRace($race);
+        return $this->redirectToRoute('race_show', ['race' => $race->getId()]);
     }
 }
