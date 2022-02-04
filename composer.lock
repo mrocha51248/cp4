@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b69029f1d231be238544d4798ae3b43",
+    "content-hash": "6078455dc2e22a0eab978474a3474c93",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1430,6 +1430,53 @@
                 }
             ],
             "time": "2021-10-11T09:18:27+00:00"
+        },
+        {
+            "name": "elorating/elorating",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elijahcruz12/elo-rating-generator-php.git",
+                "reference": "13ef9f5b073501a9817b35ea9b4bf2ef2e02193f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elijahcruz12/elo-rating-generator-php/zipball/13ef9f5b073501a9817b35ea9b4bf2ef2e02193f",
+                "reference": "13ef9f5b073501a9817b35ea9b4bf2ef2e02193f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EloRating\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Elijah Cruz",
+                    "email": "elijah@ecwebservices.net"
+                }
+            ],
+            "description": "Generate ELO ratings for each of your players.",
+            "keywords": [
+                "chess"
+            ],
+            "support": {
+                "issues": "https://github.com/elijahcruz12/elo-rating-generator-php/issues",
+                "source": "https://github.com/elijahcruz12/elo-rating-generator-php/tree/master"
+            },
+            "time": "2021-02-01T22:36:44+00:00"
         },
         {
             "name": "friendsofphp/proxy-manager-lts",
@@ -8151,7 +8198,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "elorating/elorating": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
