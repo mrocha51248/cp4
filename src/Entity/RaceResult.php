@@ -133,9 +133,9 @@ class RaceResult
 
             // Can't compare DateInterval directly
             $now = new DateTimeImmutable();
-            $thisTime = $now->add($this->getFinishedAt()->diff($this->getStartedAt()));
-            $otherTime = $now->add($other->getFinishedAt()->diff($other->getStartedAt()));
-            return $otherTime <=> $thisTime;
+            $thisTime = $now->add($this->getStartedAt()->diff($this->getFinishedAt()));
+            $otherTime = $now->add($other->getStartedAt()->diff($other->getFinishedAt()));
+            return $thisTime <=> $otherTime;
         }
         return $thisScore <=> $otherScore;
     }
