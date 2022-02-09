@@ -1,4 +1,8 @@
 document.querySelectorAll('.race-timer').forEach(function (element) {
+    if (!element.dataset.startTime) {
+        return;
+    }
+
     const startDate = new Date(element.dataset.startTime * 1000).getTime();
 
     const updateInterval = setInterval(function () {
