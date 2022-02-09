@@ -2,7 +2,7 @@
     {% if not result.forfeited %}
         {% set time_diff = result.startedAt.diff(result.finishedAt) %}
         {% set hours = time_diff.h + (time_diff.days * 24) %}
-        {{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S') }}
+        {{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S.%F')[:-4] }}
     {% else %}
         <span class="text-danger">Forfeit</span>
     {% endif %}
