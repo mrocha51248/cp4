@@ -1,15 +1,17 @@
+const referenceTime = new Date().getTime();
+
 document.querySelectorAll('.race-timer').forEach(function (element) {
-    if (!element.dataset.startTime) {
+    if (!element.dataset.deltaTime) {
         return;
     }
 
-    const startDate = new Date(element.dataset.startTime * 1000).getTime();
+    const startTime = referenceTime - element.dataset.deltaTime;
 
     const updateInterval = setInterval(function () {
         const now = new Date().getTime();
 
-        const negative = startDate > now;
-        const diff = Math.abs(now - startDate);
+        const negative = startTime > now;
+        const diff = Math.abs(now - startTime);
 
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));

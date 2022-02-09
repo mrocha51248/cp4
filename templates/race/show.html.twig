@@ -25,7 +25,10 @@
     {% if not race.finished and user_result %}
     <hr>
     <div class="race-controls">
-        <span class="race-timer" data-start-time="{{ user_result.finished ? '' : user_result.startedAt|date('U') }}">
+        {% if not user_result.finished %}
+            {% set delta_time = dateinterval_converter.millisecondsTotal(user_result.startedAt.diff(date())) %}
+        {% endif %}
+        <span class="race-timer" data-delta-time="{{ delta_time ?? '' }}">
             {% include "components/_result_time.html.twig" with {result: user_result} %}
         </span>
         <div class="d-flex gap-3">
