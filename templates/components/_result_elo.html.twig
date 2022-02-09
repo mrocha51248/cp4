@@ -1,0 +1,9 @@
+{% if result.finishElo %}
+    {{ result.startElo }} -> {{ result.finishElo }}
+    {% set elo_diff = result.finishElo - result.startElo %}
+    <span class="p-1 small{{ elo_diff > 0 ? ' text-success' : (elo_diff < 0 ? ' text-danger' : '')}}">
+        {{ (elo_diff >= 0 ? '+' : '') ~ elo_diff }}
+    </span>
+{% else %}
+    {{ result.startElo }}
+{% endif %}
