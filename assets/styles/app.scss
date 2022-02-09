@@ -48,9 +48,10 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 1rem 3rem;
+    gap: 1rem;
 
     .race-timer {
+        min-width: 15rem;
         font-size: 1.5rem;
         font-weight: bolder;
         padding: 0.5rem;
