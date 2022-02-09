@@ -20,8 +20,8 @@
             </thead>
             <tbody>
                 {% for race in races %}
-                <tr>
-                    <td><a href="{{ path('race_show', {race: race.id}) }}">{{ race.id }}</a></td>
+                <tr class="position-relative">
+                    <td><a href="{{ path('race_show', {race: race.id}) }}" class="stretched-link"></a>{{ race.id }}</td>
                     <td>{{ race.createdAt|date }}</td>
                     <td>{{ race.category.game.name }}</td>
                     <td>{{ race.category.name }}</td>
@@ -29,7 +29,7 @@
                     <td>
                         <form action="{{ path('race_close', {race: race.id}) }}" method="POST">
                             <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
-                            <button type="submit" class="btn btn-primary">Close</button>
+                            <button type="submit" class="btn btn-primary position-relative" style="z-index: 1;">Close</button>
                         </form>
                     </td>
                 </tr>
