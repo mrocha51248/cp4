@@ -15,10 +15,10 @@ class Race
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime_immutable_microseconds')]
     private $createdAt;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: 'datetime_immutable_microseconds', nullable: true)]
     private $finishedAt;
 
     #[ORM\OneToMany(mappedBy: 'race', targetEntity: RaceResult::class, orphanRemoval: true)]

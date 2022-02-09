@@ -14,10 +14,10 @@ class RaceResult
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'datetime_immutable_microseconds')]
     private $startedAt;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: 'datetime_immutable_microseconds', nullable: true)]
     private $finishedAt;
 
     #[ORM\Column(type: 'integer')]
