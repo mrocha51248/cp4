@@ -26,7 +26,7 @@ document.querySelectorAll('.race-timer').forEach(function (element) {
     }, 10);
 
     document.querySelectorAll('.race-timer-stopper').forEach(function (stopper) {
-        stopper.addEventListener('click', function (event) {
+        stopper.addEventListener('submit', function (event) {
             clearInterval(updateInterval);
         });
     });
