@@ -1,11 +1,13 @@
-{% if result.finished %}
-    {% if not result.forfeited %}
-        {% set time_diff = result.startedAt.diff(result.finishedAt) %}
-        {% set hours = time_diff.h + (time_diff.days * 24) %}
-        {{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S.%F')[:-4] }}
+<span class="race-time">
+    {% if finishedAt ?? result.finished %}
+        {% if not result.forfeited %}
+            {% set time_diff = result.startedAt.diff(finishedAt ?? result.finishedAt) %}
+            {% set hours = time_diff.h + (time_diff.days * 24) %}
+            {{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S.') }}<small>{{ time_diff|date('%F')[:2] }}</small>
+        {% else %}
+            <span class="text-danger">Forfeit</span>
+        {% endif %}
     {% else %}
-        <span class="text-danger">Forfeit</span>
+        Racing...
     {% endif %}
-{% else %}
-    Racing...
-{% endif %}
+</span>

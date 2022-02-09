@@ -29,7 +29,7 @@
             {% set delta_time = dateinterval_converter.millisecondsTotal(user_result.startedAt.diff(date())) %}
         {% endif %}
         <span class="race-timer" data-delta-time="{{ delta_time ?? '' }}">
-            {% include "components/_result_time.html.twig" with {result: user_result} %}
+            {% include "components/_result_time.html.twig" with {result: user_result, finishedAt: user_result.finishedAt|default(date())} %}
         </span>
         <div class="d-flex gap-3">
             <form action="{{ path('race_done', {race: race.id}) }}" method="POST">
