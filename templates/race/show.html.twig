@@ -22,10 +22,12 @@
         {% endif %}
     </p>
 
-    {% if not race.finished and not (user_result.forfeited ?? true) %}
+    {% if not race.finished and user_result %}
     <hr>
     <div class="race-controls">
-        <span class="race-timer" data-start-time="{{ user_result.startedAt|date('U') }}">Loading...</span>
+        <span class="race-timer" data-start-time="{{ user_result.finished ? '' : user_result.startedAt|date('U') }}">
+            {% include "components/_result_time.html.twig" with {result: user_result} %}
+        </span>
         <div class="d-flex gap-3">
             <form action="{{ path('race_done', {race: race.id}) }}" method="POST">
                 <input type="hidden" name="token" value="{{ csrf_token(race.id) }}"/>
@@ -63,32 +65,9 @@
             <tbody>
                 {% for result in race.results|sort((a, b) => a.compare(b)) %}
                 <tr>
-                    {% if result.finished %}
-                        {% if not result.forfeited %}
-                            {% set time_diff = result.startedAt.diff(result.finishedAt) %}
-                            {% set hours = time_diff.h + (time_diff.days * 24) %}
-                            <td>{{ (hours ? hours ~ ':' : '') ~ time_diff|date('%I:%S') }}</td>
-                        {% else %}
-                            <td class="text-danger">Forfeit</td>
-                        {% endif %}
-                    {% else %}
-                        <td>Racing...</td>
-                    {% endif %}
-
+                    <td>{% include "components/_result_time.html.twig" %}</td>
                     <td>{{ result.user.name }}</td>
-
-                    {% if race.finished %}
-                    <td>
-                        {{ result.startElo }} -> {{ result.finishElo }}
-                        {% set elo_diff = result.finishElo - result.startElo %}
-                        <span class="p-1 small{{ elo_diff > 0 ? ' text-success' : (elo_diff < 0 ? ' text-danger' : '')}}">
-                            {{ (elo_diff >= 0 ? '+' : '') ~ elo_diff }}
-                        </span>
-                    </td>
-                    {% else %}
-                    <td>{{ result.startElo }}</td>
-                    {% endif %}
-
+                    <td>{% include "components/_result_elo.html.twig" %}</td>
                     <td>{{ result.startedAt|date }}</td>
                 </tr>
                 {% endfor %}
